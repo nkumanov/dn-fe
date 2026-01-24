@@ -1,6 +1,5 @@
 import mainIntroImg from '../../assets/70eb029b-c11f-4745-9e11-e62c0a55a4bc.jpeg';
 import styles from './Intro.module.scss';
-import mainImage from '../../assets/70eb029b-c11f-4745-9e11-e62c0a55a4bc.jpeg';
 function Intro() {
   return (
     <>
