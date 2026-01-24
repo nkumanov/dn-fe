@@ -156,7 +156,7 @@ function Attendance() {
                   className={styles.formElementSelect}
                   style={{ marginTop: "1.4rem" }}
                 >
-                  <label htmlFor="">Колко човека ще присъствате?</label>
+                  <label htmlFor="">Колко гости ще бъдете?</label>
                   <select
                     {...register("guestCount")}
                     name="guestCount"
