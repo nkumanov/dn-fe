@@ -14,6 +14,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  min-height: 70vh;
+  background-image: url('../../assets/second-img-bg.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   width: 100%;
   h2 {
     color: #2b2b2b;
@@ -76,8 +81,13 @@
   align-items: center;
   flex-direction: column;
   width: 100%;
+  min-height: 70vh;
+  background-image: url('../../assets/program-img.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   h2 {
-    color: #2b2b2b;
+    color: white;
     font-size: 2rem;
     font-style: italic;
     text-align: center;
@@ -88,7 +98,7 @@
     font-size: 1.6rem;
     padding: 1rem;
     text-align: center;
-    color: #2b2b2b;
+    color: white;
     span {
       font-size: 2.5rem;
       font-style: italic;
@@ -105,9 +115,10 @@
       li {
         span {
           font-size: 1.8rem;
-          color: #2b2b2b;
+          color: white;
         }
         font-size: 1.6rem;
+        color: white;
         margin-bottom: 3rem;
         font-style: italic;
         font-weight: 400;
@@ -193,9 +204,15 @@
   padding-top: 3rem;
   background-color: #b7ab9d;
   width: 100%;
+  // min-height: 70vh;
+  background-image: url('../../assets/program-img.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   h3 {
     text-align: center;
     padding-top: 1rem;
+    color: white;
   }
   h3:nth-of-type(2) {
     margin-bottom: 2rem;
