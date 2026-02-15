@@ -18,7 +18,7 @@ function Intro() {
               предпочитанията си за храна.
             </p>
 
-            <img src={mainIntroImg} alt="test" />
+            {/* <img src={mainIntroImg} alt="test" /> */}
           </article>
         </section>
       </section>

@@ -60,23 +60,18 @@ function Main() {
               <li>
                 <span>🍽️ 19:30</span> - Празнична вечеря
               </li>
+              <li>
+                <span>🍰 22:00</span> - Разрязване на сватбена торта
+              </li>
+              <li>
+                <span>🎉 22:30</span> - After party
+              </li>
             </ul>
           </article>
         </section>
 
         <Attendance />
         <section className={styles.footer}>
-          <h3>
-            За да бъде празникът ни още по-красив и хармоничен, Ви каним да се вдъхновите от
-            следната цветова палитра:
-          </h3>
-          <div className={styles.colorPallete}>
-            <span className={styles.palette1}></span>
-            <span className={styles.palette2}></span>
-            <span className={styles.palette3}></span>
-            <span className={styles.palette4}></span>
-            <span className={styles.palette5}></span>
-          </div>
           <h3>
             Ако имате нужда от допълнителна информация, не се колебайте да ни потърсите.
             <br /> Очакваме Ви!
