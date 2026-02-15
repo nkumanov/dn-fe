@@ -5,7 +5,7 @@ function Intro() {
     <>
       <section className={styles.wrapper}>
         <section className={styles.sectionFirst}>
-          <h1>Николай и Десислава </h1>
+          <h1>Десислава и Николай</h1>
           <h2>11 Юли, 2026</h2>
         </section>
         <section className={styles.sectionSecond}>
