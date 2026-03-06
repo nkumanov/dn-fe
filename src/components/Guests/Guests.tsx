@@ -27,6 +27,7 @@ function Guests() {
             <td>{user.attend ? UserAttend[user.attend] : "Няма информация"}</td>
             <td>{user.meal ? Meal[user.meal] : ""}</td>
             <td>{user.alergy ? user.alergy : ""}</td>
+            <td>{user.drinks ? user.drinks : ""}</td>
           </tr>
         ));
       }
@@ -100,6 +101,7 @@ function Guests() {
               <th>Присъствие</th>
               <th>Избор на меню</th>
               <th>Алергия</th>
+              <th>Напитки</th>
             </tr>
           </thead>
           <tbody>{data && showGuests(filter)}</tbody>

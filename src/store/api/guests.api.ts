@@ -10,6 +10,7 @@ export const guestApi = baseApi.injectEndpoints({
         attend: Attend;
         meal?: Meal;
         alergy?: string;
+        drinks?: string;
       }[],
       void
     >({

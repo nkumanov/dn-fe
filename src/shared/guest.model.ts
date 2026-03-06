@@ -2,6 +2,7 @@ export type Attendee = {
   name: string;
   meal: Meal | null;
   alergy: string;
+  drinks: string;
 };
 export type FormValues = {
   attend: Attend | null;
