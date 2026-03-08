@@ -23,6 +23,7 @@ function Attendance() {
     },
   });
   const [addNewGuest, { isSuccess }] = useAddNewGuestMutation();
+  const [isAdding, setIsAdding] = useState(false);
   const { append, remove, fields } = useFieldArray({
     name: 'guests',
     control,
@@ -33,6 +34,7 @@ function Attendance() {
   const guestCountWatch = parseInt(watch('guestCount') || '1');
   const attend = watch('attend');
   const onSubmitHandler: SubmitHandler<FormValues> = async (data) => {
+    setIsAdding(true);
     if (data.attend === Attend.NotComming) {
       const formDataToSend = {
         attend: data.attend,
@@ -45,6 +47,8 @@ function Attendance() {
         }).unwrap();
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsAdding(false);
       }
     } else {
       const formDataToSend = {
@@ -58,6 +62,8 @@ function Attendance() {
         }).unwrap();
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsAdding(false);
       }
     }
   };
@@ -88,89 +94,51 @@ function Attendance() {
   return (
     <section className={styles.attendanceForm}>
       <h2>Присъствие</h2>
-      {localStorage.getItem('userAnswer') && (
-        <p className={styles.answer}>
-          Благодарим Ви за отговора! Вие попълнихте нашия въпросник. В случай че искате да
-          промените вашия отговор, бихме помолили да се свържете с нас!
-        </p>
-      )}
-      {!localStorage.getItem('userAnswer') && (
+      {isAdding && <h1>Loading ...</h1>}
+      {!isAdding && (
         <>
-          <h3>Моля, попълнете следните въпроси</h3>
-          <form onSubmit={handleSubmit(onSubmitHandler)}>
-            <div className={`${styles.formElement} ${styles.flexCol}`}>
-              <h5>Ще ни окажете ли честта да присъствате на нашето тържество?</h5>
-              <div>
-                <input
-                  {...register('attend', { required: 'Задължително поле.' })}
-                  type="radio"
-                  id="coming"
-                  value={Attend.Comming}
-                />
-                <label className={styles.bulletOption} htmlFor="coming">
-                  Да, ще присъствам
-                </label>
-              </div>
-              <div>
-                <input
-                  {...register('attend', { required: 'Задължително поле.' })}
-                  type="radio"
-                  id="notComing"
-                  value={Attend.NotComming}
-                />
-                <label className={styles.bulletOption} htmlFor="notComing">
-                  Не, няма да присъствам
-                </label>
-              </div>
-
-              {attend === Attend.NotComming && (
+          {localStorage.getItem('userAnswer') && (
+            <p className={styles.answer}>
+              Благодарим Ви за отговора! Вие попълнихте нашия въпросник. В случай че искате да
+              промените вашия отговор, бихме помолили да се свържете с нас!
+            </p>
+          )}
+          {!localStorage.getItem('userAnswer') && (
+            <>
+              <h3>Моля, попълнете следните въпроси</h3>
+              <form onSubmit={handleSubmit(onSubmitHandler)}>
                 <div className={`${styles.formElement} ${styles.flexCol}`}>
-                  <label htmlFor="name">Име и фамилия</label>
-                  <input
-                    type="text"
-                    id="name"
-                    {...register(`notComingAttendee`, {
-                      required: 'Задължително поле',
-                      pattern: {
-                        value: /^[\p{L}\s]+$/u,
-                        message: 'Моля въведете валидно име.',
-                      },
-                    })}
-                    onBlur={(e) => {
-                      const trimmed = e.target.value.trim();
-                      setValue('notComingAttendee', trimmed, {
-                        shouldValidate: true,
-                      });
-                    }}
-                  />
-                  {errors.notComingAttendee?.message && (
-                    <p className={styles.errorMessage}>{errors.notComingAttendee?.message}</p>
-                  )}
-                </div>
-              )}
-              {attend === Attend.Comming && (
-                <div className={styles.formElementSelect} style={{ marginTop: '1.4rem' }}>
-                  <label htmlFor="">Колко гости ще бъдете?</label>
-                  <select {...register('guestCount')} name="guestCount" id="guestCount">
-                    {[1, 2, 3, 4, 5, 6].map((n) => (
-                      <option key={n.toString()} value={n.toString()}>
-                        {n}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
+                  <h5>Ще ни окажете ли честта да присъствате на нашето тържество?</h5>
+                  <div>
+                    <input
+                      {...register('attend', { required: 'Задължително поле.' })}
+                      type="radio"
+                      id="coming"
+                      value={Attend.Comming}
+                    />
+                    <label className={styles.bulletOption} htmlFor="coming">
+                      Да, ще присъствам
+                    </label>
+                  </div>
+                  <div>
+                    <input
+                      {...register('attend', { required: 'Задължително поле.' })}
+                      type="radio"
+                      id="notComing"
+                      value={Attend.NotComming}
+                    />
+                    <label className={styles.bulletOption} htmlFor="notComing">
+                      Не, няма да присъствам
+                    </label>
+                  </div>
 
-              {attend === Attend.Comming &&
-                fields.map((field, i) => (
-                  <section className={styles.delimeter} key={field.id}>
-                    <h2>Гост {i + 1}</h2>
+                  {attend === Attend.NotComming && (
                     <div className={`${styles.formElement} ${styles.flexCol}`}>
                       <label htmlFor="name">Име и фамилия</label>
                       <input
                         type="text"
                         id="name"
-                        {...register(`guests.${i}.name`, {
+                        {...register(`notComingAttendee`, {
                           required: 'Задължително поле',
                           pattern: {
                             value: /^[\p{L}\s]+$/u,
@@ -179,62 +147,105 @@ function Attendance() {
                         })}
                         onBlur={(e) => {
                           const trimmed = e.target.value.trim();
-                          setValue(`guests.${i}.name`, trimmed, {
+                          setValue('notComingAttendee', trimmed, {
                             shouldValidate: true,
                           });
                         }}
                       />
-                      {errors.guests?.[i]?.name?.message && (
-                        <p className={styles.errorMessage}>{errors.guests[i]?.name?.message}</p>
+                      {errors.notComingAttendee?.message && (
+                        <p className={styles.errorMessage}>{errors.notComingAttendee?.message}</p>
                       )}
                     </div>
+                  )}
+                  {attend === Attend.Comming && (
+                    <div className={styles.formElementSelect} style={{ marginTop: '1.4rem' }}>
+                      <label htmlFor="">Колко гости ще бъдете?</label>
+                      <select {...register('guestCount')} name="guestCount" id="guestCount">
+                        {[1, 2, 3, 4, 5, 6].map((n) => (
+                          <option key={n.toString()} value={n.toString()}>
+                            {n}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
 
-                    <h5>Какво меню предпочитате?</h5>
-                    <div className={styles.formElement}>
-                      <input
-                        type="radio"
-                        id={`guests.${i}.meal.meat`}
-                        value="meat"
-                        {...register(`guests.${i}.meal`, {
-                          required: 'Задължително поле',
-                        })}
-                      />
-                      <label className={styles.bulletOption} htmlFor={`guests.${i}.meal.meat`}>
-                        Месно
-                      </label>
-                    </div>
-                    <div className={styles.formElement}>
-                      <input
-                        type="radio"
-                        value="vegie"
-                        id={`guests.${i}.meal.vegie`}
-                        {...register(`guests.${i}.meal`, {
-                          required: 'Задължително поле',
-                        })}
-                      />
-                      <label className={styles.bulletOption} htmlFor={`guests.${i}.meal.vegie`}>
-                        Вегетарианско
-                      </label>
-                    </div>
-                    <div className={`${styles.formElement} ${styles.flexCol}`}>
-                      <label htmlFor="alergy">
-                        Имате ли някакви хранителни алергии и ако да - какви?
-                      </label>
-                      <input type="text" id="alergy" {...register(`guests.${i}.alergy`)} />
-                    </div>
-                    <div className={`${styles.formElement} ${styles.flexCol}`}>
-                      <label htmlFor="drinks">
-                        Имате ли предпочитания за алкохол и ако Да, какви?
-                      </label>
-                      <input type="text" id="drinks" {...register(`guests.${i}.drinks`)} />
-                    </div>
-                  </section>
-                ))}
-            </div>
-            <button type="submit" disabled={!isValid}>
-              Изпрати
-            </button>
-          </form>
+                  {attend === Attend.Comming &&
+                    fields.map((field, i) => (
+                      <section className={styles.delimeter} key={field.id}>
+                        <h2>Гост {i + 1}</h2>
+                        <div className={`${styles.formElement} ${styles.flexCol}`}>
+                          <label htmlFor="name">Име и фамилия</label>
+                          <input
+                            type="text"
+                            id="name"
+                            {...register(`guests.${i}.name`, {
+                              required: 'Задължително поле',
+                              pattern: {
+                                value: /^[\p{L}\s]+$/u,
+                                message: 'Моля въведете валидно име.',
+                              },
+                            })}
+                            onBlur={(e) => {
+                              const trimmed = e.target.value.trim();
+                              setValue(`guests.${i}.name`, trimmed, {
+                                shouldValidate: true,
+                              });
+                            }}
+                          />
+                          {errors.guests?.[i]?.name?.message && (
+                            <p className={styles.errorMessage}>{errors.guests[i]?.name?.message}</p>
+                          )}
+                        </div>
+
+                        <h5>Какво меню предпочитате?</h5>
+                        <div className={styles.formElement}>
+                          <input
+                            type="radio"
+                            id={`guests.${i}.meal.meat`}
+                            value="meat"
+                            {...register(`guests.${i}.meal`, {
+                              required: 'Задължително поле',
+                            })}
+                          />
+                          <label className={styles.bulletOption} htmlFor={`guests.${i}.meal.meat`}>
+                            Месно
+                          </label>
+                        </div>
+                        <div className={styles.formElement}>
+                          <input
+                            type="radio"
+                            value="vegie"
+                            id={`guests.${i}.meal.vegie`}
+                            {...register(`guests.${i}.meal`, {
+                              required: 'Задължително поле',
+                            })}
+                          />
+                          <label className={styles.bulletOption} htmlFor={`guests.${i}.meal.vegie`}>
+                            Вегетарианско
+                          </label>
+                        </div>
+                        <div className={`${styles.formElement} ${styles.flexCol}`}>
+                          <label htmlFor="alergy">
+                            Имате ли някакви хранителни алергии и ако да - какви?
+                          </label>
+                          <input type="text" id="alergy" {...register(`guests.${i}.alergy`)} />
+                        </div>
+                        <div className={`${styles.formElement} ${styles.flexCol}`}>
+                          <label htmlFor="drinks">
+                            Имате ли предпочитания за алкохол и ако Да, какви?
+                          </label>
+                          <input type="text" id="drinks" {...register(`guests.${i}.drinks`)} />
+                        </div>
+                      </section>
+                    ))}
+                </div>
+                <button type="submit" disabled={!isValid}>
+                  Изпрати
+                </button>
+              </form>
+            </>
+          )}
         </>
       )}
     </section>
