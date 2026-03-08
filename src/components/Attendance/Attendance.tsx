@@ -182,7 +182,7 @@ function Attendance() {
                             {...register(`guests.${i}.name`, {
                               required: 'Задължително поле',
                               pattern: {
-                                value: /^[\p{L}\s]+$/u,
+                                value: /^[\p{L}\s-]+$/u,
                                 message: 'Моля въведете валидно име.',
                               },
                             })}
